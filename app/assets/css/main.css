@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  /* Base radius Nuxt UI derives its whole rounded-corner scale from (default 0.25rem). A
+     slightly larger base reads as "soft premium" rather than boxy/utilitarian. */
+  --ui-radius: 0.625rem;
+}
