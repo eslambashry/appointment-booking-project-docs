@@ -64,7 +64,11 @@ const pageTitle = computed(() => (route.meta.title as string | undefined) ?? 'Da
 
       <UDashboardPanel>
         <template #header>
-          <UDashboardNavbar :title="pageTitle" />
+          <UDashboardNavbar :title="pageTitle">
+            <template #right>
+              <ColorModeToggle />
+            </template>
+          </UDashboardNavbar>
         </template>
 
         <template #body>

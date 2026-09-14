@@ -112,7 +112,7 @@ const published = ref(false)
 const savedSlug = ref('')
 const publicUrl = computed(() => {
   const slug = savedSlug.value || form.slug || form.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'my-schedule'
-  return `schedulo.app/book/${auth.user?.slug}/${slug}`
+  return `http://localhost:3000/book/${auth.user?.slug}/${slug}`
 })
 
 async function handleSubmit() {

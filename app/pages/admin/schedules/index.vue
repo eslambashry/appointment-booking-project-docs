@@ -32,7 +32,7 @@ const copiedId = ref<string | null>(null)
 
 async function copyLink(schedule: Schedule) {
   try {
-    await navigator.clipboard.writeText(`https://schedulo.app/book/${auth.user?.slug}/${schedule.slug}`)
+    await navigator.clipboard.writeText(`http://localhost:3000/book/${auth.user?.slug}/${schedule.slug}`)
     copiedId.value = schedule.id
     toast.add({ title: 'Booking link copied', color: 'success', icon: 'i-lucide-check-circle' })
     setTimeout(() => (copiedId.value = null), 2000)

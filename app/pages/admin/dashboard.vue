@@ -73,7 +73,7 @@ function formatAppointmentTime(appointment: Appointment): string {
   return `${date.toLocaleDateString('en-US', { weekday: 'short' })}, ${time}`
 }
 
-const bookingLink = computed(() => `schedulo.app/book/${auth.user?.slug}`)
+const bookingLink = computed(() => `http://localhost:3000/book/${auth.user?.slug}`)
 const linkCopied = ref(false)
 const toast = useToast()
 

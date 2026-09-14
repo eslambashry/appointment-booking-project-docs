@@ -1,24 +1,7 @@
-<script setup lang="ts">
-const colorMode = useColorMode()
-
-const isDark = computed({
-  get: () => colorMode.value === 'dark',
-  set: (value) => {
-    colorMode.preference = value ? 'dark' : 'light'
-  }
-})
-</script>
-
 <template>
   <div class="min-h-screen flex flex-col bg-default">
     <div class="flex justify-end p-4">
-      <UButton
-        :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
-        color="neutral"
-        variant="ghost"
-        :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-        @click="isDark = !isDark"
-      />
+      <ColorModeToggle />
     </div>
 
     <main class="flex-1 px-4 pb-12">

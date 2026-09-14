@@ -1,13 +1,4 @@
 <script setup lang="ts">
-const colorMode = useColorMode()
-
-const isDark = computed({
-  get: () => colorMode.value === 'dark',
-  set: (value) => {
-    colorMode.preference = value ? 'dark' : 'light'
-  }
-})
-
 const navLinks = [
   { label: 'How it works', to: '/#how-it-works' },
   { label: 'Features', to: '/#features' }
@@ -42,13 +33,7 @@ const navLinks = [
         </nav>
 
         <div class="flex items-center gap-2">
-          <UButton
-            :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
-            color="neutral"
-            variant="ghost"
-            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-            @click="isDark = !isDark"
-          />
+          <ColorModeToggle />
           <UButton to="/login" color="neutral" variant="ghost" class="hidden sm:inline-flex">
             Log in
           </UButton>
