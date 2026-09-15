@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { Types } from 'mongoose'
 import { Appointment } from '../../models/Appointment'
+import type { ScheduleDocument } from '../../models/Schedule'
 
 // This route only ever cancels — the frontend (Task 010) never edits customer
 // details or reschedules, and neither does CLAUDE.md §6's admin capability
@@ -29,8 +30,10 @@ export default defineEventHandler(async (event) => {
   // Populated (matching the GET routes, Task 020) both so the response keeps
   // showing a real schedule name after cancelling — the client replaces its
   // whole appointment object with this response — and so the schedule's
-  // `updatedAt` is available below to build the exact cache key to invalidate.
-  const appointment = await Appointment.findOne({ _id: id, ownerId: user._id }).populate('scheduleId', 'name updatedAt')
+  // `updatedAt` is available below to build the exact cache key to
+  // invalidate, and location/slug for the cancellation email below.
+  const appointment = await Appointment.findOne({ _id: id, ownerId: user._id })
+    .populate('scheduleId', 'name updatedAt locationType locationValue slug')
   if (!appointment) {
     throw createError({ statusCode: 404, statusMessage: 'Not Found', message: 'Appointment not found.' })
   }
@@ -48,13 +51,34 @@ export default defineEventHandler(async (event) => {
 
   // populate() changes the runtime shape but not Mongoose's static type for
   // scheduleId (still typed as ObjectId per the schema) — this cast reflects
-  // what .populate('scheduleId', 'name updatedAt') actually returns.
-  const populatedSchedule = appointment.scheduleId as unknown as { _id: Types.ObjectId, name: string, updatedAt: Date }
+  // what .populate('scheduleId', 'name updatedAt locationType locationValue slug') actually returns.
+  const populatedSchedule = appointment.scheduleId as unknown as {
+    _id: Types.ObjectId
+    name: string
+    updatedAt: Date
+    locationType: ScheduleDocument['locationType']
+    locationValue: string
+    slug: string
+  }
   await invalidateAvailabilityCache(
     populatedSchedule._id.toString(),
     populatedSchedule.updatedAt,
     formatDateParam(appointment.startAt)
   )
+
+  // Awaited for the same reason as the booking-confirmation send
+  // (server/api/public/[ownerSlug]/[scheduleSlug]/book.post.ts) — this
+  // deploys to Vercel, where nothing left in flight after the response is
+  // sent is guaranteed to finish. sendEmail() never throws, so a broken SMTP
+  // server only adds latency, never blocks the cancellation itself.
+  const { appUrl } = useRuntimeConfig().public
+  await sendEmail({
+    to: appointment.customerEmail,
+    ...buildCancellationEmail(
+      { appointment, schedule: populatedSchedule, rebookUrl: `${appUrl.replace(/\/$/, '')}/book/${user.slug}/${populatedSchedule.slug}` },
+      user.name
+    )
+  })
 
   return appointment
 })

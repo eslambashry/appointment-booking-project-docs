@@ -104,6 +104,18 @@ export default defineEventHandler(async (event) => {
   // slot we just took for the rest of the (short) TTL window.
   await invalidateAvailabilityCache(schedule._id.toString(), schedule.updatedAt, formatDateParam(startAt))
 
+  // Awaited, not fire-and-forget — a serverless function (this deploys to
+  // Vercel) can be frozen the instant the response is sent, so anything
+  // still in flight after `return` below isn't guaranteed to complete.
+  // sendEmail() never throws (server/utils/email.ts), so a slow/broken SMTP
+  // server only adds latency here, never turns a real booking into a
+  // customer-facing error — matching the confirmation UI's own promise
+  // ("A confirmation has been sent to ...").
+  await sendEmail({
+    to: appointment.customerEmail,
+    ...buildBookingConfirmationEmail({ appointment, schedule }, owner.name)
+  })
+
   setResponseStatus(event, 201)
   return {
     confirmationCode: appointment.confirmationCode,

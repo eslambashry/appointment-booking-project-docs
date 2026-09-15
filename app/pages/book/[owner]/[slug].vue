@@ -318,8 +318,13 @@ function chooseAnotherTime() {
             </div>
           </dl>
           <template #footer>
-            <p class="text-xs text-muted">Confirmation code</p>
-            <p class="text-sm font-mono font-medium text-highlighted">{{ confirmationCode }}</p>
+            <div class="mt-4 text-sm text-muted">
+              <p>Confirmation code</p>
+              <p class="font-mono font-medium text-highlighted">{{ confirmationCode }}</p>
+            </div>
+            <div class="mt-4 text-lg text-black font-medium">
+              <p>Waiting for an email that arrives in the day of your appointment.</p>
+            </div>
           </template>
         </UCard>
       </div>

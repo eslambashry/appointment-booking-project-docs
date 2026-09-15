@@ -143,7 +143,8 @@ Server must:
 7. re-check current availability
 8. create appointment safely
 9. invalidate affected availability cache
-10. return confirmation
+10. email the customer a booking confirmation (server/utils/booking-emails.ts) — best-effort, awaited before responding (see §8's email-delivery note); never blocks or fails the booking itself
+11. return confirmation
 
 Possible:
 - 201 success
@@ -169,9 +170,11 @@ Filters may include:
 
 Authenticated owner and ownership required.
 
-### POST/PATCH cancellation endpoint
+### PATCH /api/appointments/:id
 
-Implement a clear cancellation contract if cancellation is included in MVP.
+Authenticated owner and ownership required. `{ "status": "cancelled" }` only — this endpoint cancels, it does not edit or reschedule.
+
+On success, also emails the customer a cancellation notice (server/utils/booking-emails.ts) with a "book a new time" link back to the public schedule — best-effort, awaited before responding, never blocks or fails the cancellation itself.
 
 ## 7. Calendar
 
