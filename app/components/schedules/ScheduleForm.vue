@@ -104,7 +104,7 @@ function addQuestion() {
 function removeQuestion(id: string) {
   form.questions = form.questions.filter((q) => q.id !== id)
 }
-
+const { public: { appUrl } } = useRuntimeConfig()
 const submitting = ref(false)
 const published = ref(false)
 // Preview only, before the server assigns/normalizes the real slug — replaced
@@ -112,7 +112,7 @@ const published = ref(false)
 const savedSlug = ref('')
 const publicUrl = computed(() => {
   const slug = savedSlug.value || form.slug || form.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'my-schedule'
-  return `http://localhost:3000/book/${auth.user?.slug}/${slug}`
+  return `${appUrl}/book/${auth.user?.slug}/${slug}`
 })
 
 async function handleSubmit() {
@@ -167,7 +167,7 @@ async function handleSubmit() {
 const linkCopied = ref(false)
 async function copyPublicUrl() {
   try {
-    await navigator.clipboard.writeText(`https://${publicUrl.value}`)
+    await navigator.clipboard.writeText(publicUrl.value)
     linkCopied.value = true
     toast.add({ title: 'Link copied', color: 'success', icon: 'i-lucide-check-circle' })
     setTimeout(() => (linkCopied.value = false), 2000)
@@ -204,7 +204,7 @@ async function copyPublicUrl() {
     </div>
 
     <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3">
-      <UButton :to="`https://${publicUrl}`" target="_blank" color="neutral" variant="subtle" icon="i-lucide-external-link">
+      <UButton :to="publicUrl" target="_blank" color="neutral" variant="subtle" icon="i-lucide-external-link">
         Open booking page
       </UButton>
       <UButton to="/admin/schedules" color="primary" icon="i-lucide-arrow-left">

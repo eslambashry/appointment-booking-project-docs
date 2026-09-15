@@ -179,7 +179,22 @@ Calendar UI can use appointment list APIs.
 
 Do not create a separate calendar backend subsystem unless needed.
 
-## 8. Security Rules
+## 8. Reminders
+
+### GET /api/cron/send-reminders
+
+Not session-authenticated — triggered by a Vercel Cron Job (`vercel.json`) once daily. Guarded by a `CRON_SECRET` shared secret checked against the `Authorization: Bearer <CRON_SECRET>` header Vercel automatically attaches to cron invocations.
+
+Finds today's confirmed appointments that haven't been reminded yet (`reminderSentAt` unset), emails each customer their own reminder and each schedule owner one digest of their appointments for the day, then marks those appointments as reminded so a second same-day run never double-sends.
+
+Possible responses:
+- 200 `{ appointmentsFound, customerEmailsSent, adminEmailsSent }`
+- 401 missing/invalid `CRON_SECRET`
+- 500 `CRON_SECRET` not configured outside dev
+
+Email delivery itself is best-effort (server/utils/email.ts) — a missing/unreachable SMTP server degrades to a logged skip, never a failed booking or a failed cron run, matching the Redis fallback policy in CLAUDE.md §10.
+
+## 9. Security Rules
 
 Every authenticated endpoint must verify:
 - authenticated identity
@@ -193,7 +208,7 @@ Every public booking endpoint must validate:
 
 Never trust the client to enforce business rules.
 
-## 9. Error Shape
+## 10. Error Shape
 
 Prefer a consistent error shape.
 

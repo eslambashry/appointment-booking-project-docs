@@ -2,7 +2,7 @@
   <div class="min-h-screen flex flex-col bg-default">
     <header class="p-4 sm:p-6 flex items-center justify-between">
       <NuxtLink to="/" class="flex items-center gap-2 font-semibold text-highlighted">
-        <UIcon name="i-lucide-calendar-check-2" class="size-5 text-primary" />
+        <img src="/logo-transparent.svg" alt="" class="size-6" >
         <span>Schedulo</span>
       </NuxtLink>
       <ColorModeToggle />

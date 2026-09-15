@@ -17,7 +17,7 @@ const navLinks = [
     <header class="sticky top-0 z-40 border-b border-default bg-default/80 backdrop-blur">
       <UContainer class="flex h-16 items-center justify-between gap-4">
         <NuxtLink to="/" class="flex items-center gap-2 font-semibold text-highlighted">
-          <UIcon name="i-lucide-calendar-check-2" class="size-5 text-primary" />
+          <img src="/logo-transparent.svg" alt="" class="size-6" >
           <span>Schedulo</span>
         </NuxtLink>
 
@@ -52,7 +52,7 @@ const navLinks = [
       <UContainer class="py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted">
         <p>© {{ new Date().getFullYear() }} Schedulo. All rights reserved.</p>
         <div class="flex items-center gap-2 text-highlighted font-medium">
-          <UIcon name="i-lucide-calendar-check-2" class="size-4 text-primary" />
+          <img src="/logo-transparent.svg" alt="" class="size-5" >
           Schedulo
         </div>
       </UContainer>

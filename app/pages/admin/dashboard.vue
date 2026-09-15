@@ -73,13 +73,14 @@ function formatAppointmentTime(appointment: Appointment): string {
   return `${date.toLocaleDateString('en-US', { weekday: 'short' })}, ${time}`
 }
 
-const bookingLink = computed(() => `http://localhost:3000/book/${auth.user?.slug}`)
+const { public: { appUrl } } = useRuntimeConfig()
+const bookingLink = computed(() => `${appUrl}/book/${auth.user?.slug}`)
 const linkCopied = ref(false)
 const toast = useToast()
 
 async function copyBookingLink() {
   try {
-    await navigator.clipboard.writeText(`https://${bookingLink.value}`)
+    await navigator.clipboard.writeText(bookingLink.value)
     linkCopied.value = true
     toast.add({ title: 'Booking link copied', color: 'success', icon: 'i-lucide-check-circle' })
     setTimeout(() => (linkCopied.value = false), 2000)

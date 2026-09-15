@@ -32,7 +32,7 @@ const pageTitle = computed(() => (route.meta.title as string | undefined) ?? 'Da
       <UDashboardSidebar collapsible>
         <template #header="{ collapsed }">
           <NuxtLink to="/admin/dashboard" class="flex items-center gap-2 font-semibold text-highlighted px-1">
-            <UIcon name="i-lucide-calendar-check-2" class="size-5 text-primary shrink-0" />
+            <img src="/logo-transparent.svg" alt="" class="size-6 shrink-0" >
             <span v-if="!collapsed">Schedulo</span>
           </NuxtLink>
         </template>

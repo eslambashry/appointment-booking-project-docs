@@ -12,7 +12,7 @@
       <NuxtLink to="/" class="inline-flex items-center gap-1.5 text-xs text-muted hover:text-highlighted transition-colors">
         Powered by
         <span class="inline-flex items-center gap-1 font-medium">
-          <UIcon name="i-lucide-calendar-check-2" class="size-3.5 text-primary" />
+          <img src="/logo-transparent.svg" alt="" class="size-4" >
           Schedulo
         </span>
       </NuxtLink>

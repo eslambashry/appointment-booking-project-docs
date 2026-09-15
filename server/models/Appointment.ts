@@ -21,7 +21,11 @@ const appointmentSchema = new Schema({
   timezone: { type: String, required: true },
   status: { type: String, required: true, enum: ['confirmed', 'completed', 'cancelled'], default: 'confirmed' },
   answers: { type: [answerSchema], default: [] },
-  confirmationCode: { type: String, required: true, unique: true }
+  confirmationCode: { type: String, required: true, unique: true },
+  // Set once the day-of reminder email has gone out (server/utils/reminders.ts)
+  // so a cron run that fires twice for the same day — Vercel's own docs warn
+  // invocations aren't exactly-once — never double-sends.
+  reminderSentAt: { type: Date }
 }, { timestamps: true })
 
 // Query pattern from docs/ARCHITECTURE.md §5: "appointments by owner/date"
